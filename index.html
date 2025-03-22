@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中老年人养生中医平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- 头部导航 -->
+    <header>
+        <h1>中老年人养生中医平台</h1>
+        <nav>
+            <ul>
+                <li><a href="#" data-target="home">首页</a></li>
+                <li><a href="#" data-target="knowledge">养生知识</a></li>
+                <li><a href="#" data-target="recipes">中医食谱</a></li>
+                <li><a href="#" data-target="consultation">专家咨询</a></li>
+                <li><a href="admin.html">后台管理</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- 首页 -->
+    <section id="home" class="active">
+        <h2>欢迎来到中老年人养生中医平台</h2>
+        <p>本平台致力于为中老年人提供专业的中医养生知识和建议，帮助您保持健康、享受生活。</p>
+        <p>中医养生注重整体观念和辨证论治，通过调整饮食、起居、运动等方面，达到预防疾病、延缓衰老的目的。</p>
+    </section>
+    <!-- 养生知识 -->
+    <section id="knowledge">
+        <h2>养生知识</h2>
+        <article>
+            <h3>春季养生要点</h3>
+            <p>春季是万物复苏的季节，中老年人在春季养生应注意养肝、防风、防寒。可以多吃一些具有养肝作用的食物，如菠菜、芹菜、枸杞等。</p>
+        </article>
+        <article>
+            <h3>中医按摩养生法</h3>
+            <p>中医按摩是一种简单有效的养生方法，通过按摩穴位可以调节身体机能、促进血液循环。例如，按摩足三里穴可以增强免疫力、改善消化功能。</p>
+        </article>
+    </section>
+    <!-- 中医食谱 -->
+    <section id="recipes">
+        <h2>中医食谱</h2>
+        <article>
+            <h3>红枣桂圆粥</h3>
+            <p>材料：红枣、桂圆、大米</p>
+            <p>做法：将红枣、桂圆和大米一起煮成粥，具有补血安神的功效。</p>
+        </article>
+        <article>
+            <h3>山药百合汤</h3>
+            <p>材料：山药、百合、冰糖</p>
+            <p>做法：将山药、百合和冰糖一起煮成汤，具有润肺止咳的功效。</p>
+        </article>
+    </section>
+    <!-- 专家咨询 -->
+    <section id="consultation">
+        <h2>专家咨询</h2>
+        <form id="consultationForm">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" required>
+            <label for="email">邮箱：</label>
+            <input type="email" id="email" required>
+            <label for="question">咨询问题：</label>
+            <textarea id="question" required></textarea>
+            <input type="submit" value="提交咨询">
+        </form>
+    </section>
+    <!-- 页脚 -->
+    <footer>
+        <p>版权所有 &copy; 2025 中老年人养生中医平台</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>    
