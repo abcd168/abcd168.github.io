@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日贺卡</title>
+    <style>
+        body {
+            background-color: #f9f0ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(255, 192, 203, 0.3);
+            border-radius: 50%;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(173, 216, 230, 0.3);
+            border-radius: 50%;
+        }
+
+        h1 {
+            color: #ff69b4;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .cake-fall {
+            position: absolute;
+            pointer-events: none;
+            font-size: 24px;
+            animation: cakeFall 3s ease-in-out;
+        }
+
+        @keyframes cakeFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>生日快乐！</h1>
+        <p>愿这新的一岁，如璀璨星辰般闪耀，每一个梦想都能照进现实，每一次努力都能收获满满。祝你生活充满欢笑，健康常伴左右，生日快乐！</p>
+    </div>
+    <script>
+        document.addEventListener('mousemove', function (event) {
+            const cake = document.createElement('div');
+            cake.classList.add('cake-fall');
+            cake.textContent = '🍰';
+            cake.style.left = event.clientX + 'px';
+            cake.style.top = event.clientY + 'px';
+            document.body.appendChild(cake);
+
+            setTimeout(() => {
+                cake.remove();
+            }, 3000);
+        });
+    </script>
+</body>
+
+</html>    
