@@ -104,7 +104,7 @@
         // 随机 emoji 从鼠标位置下落，每隔 0.2 秒生成一个
         document.addEventListener('mousemove', function (event) {
             const currentTime = Date.now();
-            if (currentTime - lastMouseMoveTime > 200) {
+            if (currentTime - lastMouseMoveTime > 100) {
                 const emoji = document.createElement('div');
                 emoji.classList.add('mouse-emoji');
                 emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
