@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhiRhythm - 节奏之光</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0099',
+                        secondary: '#390099',
+                        accent: '#FFD60A',
+                        dark: '#0A0A0A',
+                        light: '#FFFFFF',
+                        gray: '#B2BEC3'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif']
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .glow {
+                filter: drop-shadow(0 0 8px currentColor);
+            }
+            .pulse-slow {
+                animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            .track-gradient {
+                background: linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.7));
+            }
+            .judgment-appear {
+                animation: judgment 0.5s ease-out forwards;
+            }
+            .score-change {
+                animation: scoreChange 0.5s ease-out forwards;
+            }
+            .combo-counter {
+                animation: comboGrow 0.3s ease-out forwards;
+            }
+            .note-fall {
+                animation: noteFall linear forwards;
+            }
+            .judgment-perfect { color: #FFD60A; text-shadow: 0 0 10px #FFD60A; }
+            .judgment-great { color: #390099; text-shadow: 0 0 10px #390099; }
+            .judgment-good { color: #4CC9F0; text-shadow: 0 0 10px #4CC9F0; }
+            .judgment-miss { color: #FF0054; text-shadow: 0 0 10px #FF0054; }
+        }
+
+        @keyframes judgment {
+            0% { opacity: 0; transform: translateY(-20px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+
+        @keyframes scoreChange {
+            0% { opacity: 0; transform: translateY(-10px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(10px); }
+        }
+
+        @keyframes comboGrow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes noteFall {
+            from { transform: translateY(-100px); }
+            to { transform: translateY(calc(100vh - 150px)); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-dark text-light overflow-hidden font-sans">
+    <!-- 加载屏 -->
+    <div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-dark">
+        <div class="text-center">
+            <div class="w-24 h-24 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+            <h2 class="text-2xl font-display font-bold text-primary mb-2">加载中...</h2>
+            <p class="text-gray" id="loading-progress">正在准备游戏资源</p>
+        </div>
+    </div>
+
+    <!-- 主菜单 -->
+    <div id="main-menu" class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-dark/95 backdrop-blur-md">
+        <div class="text-center max-w-md w-full px-6 py-10 bg-dark/80 rounded-2xl border border-primary/20 shadow-xl">
+            <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-8 pulse-slow">PhiRhythm</h1>
+            
+            <div class="space-y-4 mb-8">
+                <button id="start-game" class="w-full py-4 px-6 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-play mr-2"></i> 开始游戏
+                </button>
+                
+                <button id="select-song" class="w-full py-4 px-6 bg-dark border border-primary/30 hover:border-primary text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-music mr-2"></i> 选择歌曲
+                </button>
+                
+                <button id="options" class="w-full py-4 px-6 bg-dark border border-primary/30 hover:border-primary text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-cog mr-2"></i> 游戏设置
+                </button>
+                
+                <button id="ranking" class="w-full py-4 px-6 bg-dark border border-primary/30 hover:border-primary text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-trophy mr-2"></i> 排行榜
+                </button>
+            </div>
+            
+            <div class="text-gray text-sm">
+                <p>使用 ← ↑ ↓ → 键或 ASDF 键击打节奏</p>
+                <p class="mt-1">按空格键暂停游戏</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 歌曲选择界面 -->
+    <div id="song-selection" class="fixed inset-0 z-40 hidden flex flex-col bg-dark/95 backdrop-blur-md p-4 md:p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-display font-bold text-primary">选择歌曲</h2>
+            <button id="back-to-menu" class="p-2 rounded-full hover:bg-primary/20 transition-colors">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 歌曲卡片 1 -->
+            <div class="song-card bg-dark/60 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 cursor-pointer transform hover:-translate-y-1">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://picsum.photos/id/1019/400/200" alt="歌曲封面" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 p-2">
+                        <span class="px-2 py-1 bg-primary/80 text-white text-xs rounded-full">EXTREME</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Future World</h3>
+                    <p class="text-gray text-sm mb-3">Virtual Self</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fa fa-star text-accent mr-1"></i>
+                            <span>9.8</span>
+                        </div>
+                        <div class="flex items-center text-gray text-sm">
+                            <i class="fa fa-clock-o mr-1"></i>
+                            <span>2:45</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 歌曲卡片 2 -->
+            <div class="song-card bg-dark/60 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 cursor-pointer transform hover:-translate-y-1">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://picsum.photos/id/1039/400/200" alt="歌曲封面" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 p-2">
+                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded-full">HARD</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Lightspeed</h3>
+                    <p class="text-gray text-sm mb-3">Kero Kero Bonito</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fa fa-star text-accent mr-1"></i>
+                            <span>8.5</span>
+                        </div>
+                        <div class="flex items-center text-gray text-sm">
+                            <i class="fa fa-clock-o mr-1"></i>
+                            <span>3:10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 歌曲卡片 3 -->
+            <div class="song-card bg-dark/60 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 cursor-pointer transform hover:-translate-y-1">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://picsum.photos/id/1059/400/200" alt="歌曲封面" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 p-2">
+                        <span class="px-2 py-1 bg-accent/80 text-dark text-xs rounded-full">EXPERT</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Quantum Break</h3>
+                    <p class="text-gray text-sm mb-3">Neon Genesis</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fa fa-star text-accent mr-1"></i>
+                            <span>9.2</span>
+                        </div>
+                        <div class="flex items-center text-gray text-sm">
+                            <i class="fa fa-clock-o mr-1"></i>
+                            <span>3:35</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 歌曲卡片 4 -->
+            <div class="song-card bg-dark/60 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 cursor-pointer transform hover:-translate-y-1">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://picsum.photos/id/1073/400/200" alt="歌曲封面" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 p-2">
+                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded-full">HARD</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Cybernetic</h3>
+                    <p class="text-gray text-sm mb-3">Synthwave</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fa fa-star text-accent mr-1"></i>
+                            <span>8.7</span>
+                        </div>
+                        <div class="flex items-center text-gray text-sm">
+                            <i class="fa fa-clock-o mr-1"></i>
+                            <span>2:58</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 歌曲卡片 5 -->
+            <div class="song-card bg-dark/60 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 cursor-pointer transform hover:-translate-y-1">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://picsum.photos/id/1080/400/200" alt="歌曲封面" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 p-2">
+                        <span class="px-2 py-1 bg-primary/80 text-white text-xs rounded-full">EXTREME</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Neon City</h3>
+                    <p class="text-gray text-sm mb-3">Night Owl</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fa fa-star text-accent mr-1"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="flex items-center text-gray text-sm">
+                            <i class="fa fa-clock-o mr-1"></i>
+                            <span>3:20</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 歌曲卡片 6 -->
+            <div class="song-card bg-dark/60 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 cursor-pointer transform hover:-translate-y-1">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://picsum.photos/id/1082/400/200" alt="歌曲封面" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 p-2">
+                        <span class="px-2 py-1 bg-accent/80 text-dark text-xs rounded-full">EXPERT</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Digital Dreams</h3>
+                    <p class="text-gray text-sm mb-3">Retrowave</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fa fa-star text-accent mr-1"></i>
+                            <span>9.0</span>
+                        </div>
+                        <div class="flex items-center text-gray text-sm">
+                            <i class="fa fa-clock-o mr-1"></i>
+                            <span>3:05</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏界面 -->
+    <div id="game-screen" class="fixed inset-0 z-30 hidden">
+        <!-- 背景 -->
+        <div class="fixed inset-0 bg-gradient-to-b from-dark to-dark/80 z-0">
+            <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1076/1920/1080')] bg-cover bg-center opacity-20"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent"></div>
+        </div>
+
+        <!-- 游戏信息栏 -->
+        <div class="fixed top-0 left-0 right-0 z-10 flex justify-between items-center p-4 bg-dark/70 backdrop-blur-md">
+            <div class="flex items-center">
+                <button id="pause-button" class="p-2 rounded-full hover:bg-primary/20 transition-colors">
+                    <i class="fa fa-pause"></i>
+                </button>
+                <span id="current-song-display" class="ml-4 font-bold">Future World - Virtual Self</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="text-center">
+                    <div class="text-gray text-xs">分数</div>
+                    <div id="score" class="text-xl font-bold">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-gray text-xs">连击</div>
+                    <div id="combo" class="text-xl font-bold">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-gray text-xs">准确度</div>
+                    <div id="accuracy" class="text-xl font-bold">0.0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 判定区域 -->
+        <div class="fixed inset-0 z-10 flex justify-center items-center">
+            <div class="relative w-full max-w-2xl h-full flex">
+                <!-- 轨道 1 -->
+                <div class="flex-1 relative border-r border-gray/20">
+                    <div class="absolute bottom-32 left-0 right-0 h-16 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full border-2 border-primary/50 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full border-2 border-primary/70 flex items-center justify-center">
+                                <div class="w-4 h-4 rounded-full bg-primary/30"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 轨道 2 -->
+                <div class="flex-1 relative border-r border-gray/20">
+                    <div class="absolute bottom-32 left-0 right-0 h-16 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full border-2 border-secondary/50 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full border-2 border-secondary/70 flex items-center justify-center">
+                                <div class="w-4 h-4 rounded-full bg-secondary/30"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 轨道 3 -->
+                <div class="flex-1 relative border-r border-gray/20">
+                    <div class="absolute bottom-32 left-0 right-0 h-16 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full border-2 border-accent/50 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full border-2 border-accent/70 flex items-center justify-center">
+                                <div class="w-4 h-4 rounded-full bg-accent/30"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 轨道 4 -->
+                <div class="flex-1 relative">
+                    <div class="absolute bottom-32 left-0 right-0 h-16 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full border-2 border-light/50 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full border-2 border-light/70 flex items-center justify-center">
+                                <div class="w-4 h-4 rounded-full bg-light/30"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 判定文本 -->
+                <div id="judgment-text" class="absolute bottom-56 left-0 right-0 text-center text-3xl font-bold opacity-0"></div>
+                
+                <!-- 分数变化 -->
+                <div id="score-change" class="absolute bottom-48 left-0 right-0 text-center text-xl opacity-0"></div>
+            </div>
+        </div>
+
+        <!-- 键盘提示 -->
+        <div class="fixed bottom-10 left-0 right-0 z-10 flex justify-center">
+            <div class="flex space-x-4">
+                <div class="w-16 h-16 rounded-lg bg-dark/70 backdrop-blur-md border border-primary/30 flex items-center justify-center">
+                    <span class="text-xl font-bold">A</span>
+                </div>
+                <div class="w-16 h-16 rounded-lg bg-dark/70 backdrop-blur-md border border-secondary/30 flex items-center justify-center">
+                    <span class="text-xl font-bold">S</span>
+                </div>
+                <div class="w-16 h-16 rounded-lg bg-dark/70 backdrop-blur-md border border-accent/30 flex items-center justify-center">
+                    <span class="text-xl font-bold">D</span>
+                </div>
+                <div class="w-16 h-16 rounded-lg bg-dark/70 backdrop-blur-md border border-light/30 flex items-center justify-center">
+                    <span class="text-xl font-bold">F</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 返回主页按钮 -->
+        <div class="fixed bottom-4 right-4 z-20">
+            <button id="back-home-button" class="w-12 h-12 rounded-full bg-dark/70 backdrop-blur-md border border-primary/30 hover:border-primary flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                <i class="fa fa-home"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 暂停菜单 -->
+    <div id="pause-menu" class="fixed inset-0 z-50 hidden flex flex-col items-center justify-center bg-dark/80 backdrop-blur-md">
+        <div class="bg-dark/90 rounded-2xl p-8 max-w-md w-full border border-primary/20 shadow-xl">
+            <h2 class="text-2xl font-display font-bold text-center mb-6 text-primary">游戏暂停</h2>
+            
+            <div class="space-y-4 mb-8">
+                <button id="resume-game" class="w-full py-3 px-6 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-play mr-2"></i> 继续游戏
+                </button>
+                
+                <button id="restart-game" class="w-full py-3 px-6 bg-dark border border-primary/30 hover:border-primary text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-refresh mr-2"></i> 重新开始
+                </button>
+                
+                <button id="quit-game" class="w-full py-3 px-6 bg-dark border border-gray/30 hover:border-gray text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray/50 flex items-center justify-center">
+                    <i class="fa fa-sign-out mr-2"></i> 返回主菜单
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 结算界面 -->
+    <div id="result-screen" class="fixed inset-0 z-50 hidden flex flex-col items-center justify-center bg-dark/80 backdrop-blur-md">
+        <div class="bg-dark/90 rounded-2xl p-8 max-w-md w-full border border-primary/20 shadow-xl">
+            <h2 class="text-2xl font-display font-bold text-center mb-6 text-primary">游戏结束</h2>
+            
+            <div class="space-y-6 mb-8">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray">最终得分</span>
+                    <span id="final-score" class="text-2xl font-bold">958,274</span>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <span class="text-gray">最大连击</span>
+                    <span id="max-combo" class="text-xl font-bold">127</span>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <span class="text-gray">准确度</span>
+                    <span id="final-accuracy" class="text-xl font-bold">98.7%</span>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div>
+                        <div class="text-xs text-gray">完美</div>
+                        <div id="perfect-count" class="text-lg font-bold text-accent">145</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray">优秀</div>
+                        <div id="great-count" class="text-lg font-bold text-secondary">32</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray">良好</div>
+                        <div id="good-count" class="text-lg font-bold text-gray">8</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray">失误</div>
+                        <div id="miss-count" class="text-lg font-bold text-red-500">3</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div id="rank-badge" class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-primary/20">
+                        S
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <button id="play-again" class="w-full py-3 px-6 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-refresh mr-2"></i> 再玩一次
+                </button>
+                
+                <button id="back-to-menu-result" class="w-full py-3 px-6 bg-dark border border-primary/30 hover:border-primary text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center">
+                    <i class="fa fa-home mr-2"></i> 返回主菜单
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态管理
+        const gameState = {
+            isPlaying: false,
+            isPaused: false,
+            score: 0,
+            combo: 0,
+            maxCombo: 0,
+            accuracy: 0,
+            perfectCount: 0,
+            greatCount: 0,
+            goodCount: 0,
+            missCount: 0,
+            notes: [],
+            noteSpeed: 1500, // 音符下落时间（毫秒）
+            currentSong: null,
+            startTime: 0,
+            audio: null,
+            songs: [
+                { 
+                    title: "Future World", 
+                    artist: "Virtual Self", 
+                    level: "EXTREME",
+                    difficulty: 9.8,
+                    duration: "2:45",
+                    cover: "https://picsum.photos/id/1019/400/200",
+                    audio: "https://samplelib.com/lib/preview/mp3/sample-15s.mp3"
+                },
+                { 
+                    title: "Lightspeed", 
+                    artist: "Kero Kero Bonito", 
+                    level: "HARD",
+                    difficulty: 8.5,
+                    duration: "3:10",
+                    cover: "https://picsum.photos/id/1039/400/200",
+                    audio: "https://samplelib.com/lib/preview/mp3/sample-15s.mp3"
+                },
+                { 
+                    title: "Quantum Break", 
+                    artist: "Neon Genesis", 
+                    level: "EXPERT",
+                    difficulty: 9.2,
+                    duration: "3:35",
+                    cover: "https://picsum.photos/id/1059/400/200",
+                    audio: "https://samplelib.com/lib/preview/mp3/sample-15s.mp3"
+                },
+                { 
+                    title: "Cybernetic", 
+                    artist: "Synthwave", 
+                    level: "HARD",
+                    difficulty: 8.7,
+                    duration: "2:58",
+                    cover: "https://picsum.photos/id/1073/400/200",
+                    audio: "https://samplelib.com/lib/preview/mp3/sample-15s.mp3"
+                },
+                { 
+                    title: "Neon City", 
+                    artist: "Night Owl", 
+                    level: "EXTREME",
+                    difficulty: 9.5,
+                    duration: "3:20",
+                    cover: "https://picsum.photos/id/1080/400/200",
+                    audio: "https://samplelib.com/lib/preview/mp3/sample-15s.mp3"
+                },
+                { 
+                    title: "Digital Dreams", 
+                    artist: "Retrowave", 
+                    level: "EXPERT",
+                    difficulty: 9.0,
+                    duration: "3:05",
+                    cover: "https://picsum.photos/id/1082/400/200",
+                    audio: "https://samplelib.com/lib/preview/mp3/sample-15s.mp3"
+                }
+            ]
+        };
+
+        // DOM 元素
+        const loadingScreen = document.getElementById('loading-screen');
+        const mainMenu = document.getElementById('main-menu');
+        const songSelection = document.getElementById('song-selection');
+        const gameScreen = document.getElementById('game-screen');
+        const pauseMenu = document.getElementById('pause-menu');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const startGameBtn = document.getElementById('start-game');
+        const selectSongBtn = document.getElementById('select-song');
+        const optionsBtn = document.getElementById('options');
+        const backToMenuBtn = document.getElementById('back-to-menu');
+        const pauseBtn = document.getElementById('pause-button');
+        const resumeGameBtn = document.getElementById('resume-game');
+        const restartGameBtn = document.getElementById('restart-game');
+        const quitGameBtn = document.getElementById('quit-game');
+        const playAgainBtn = document.getElementById('play-again');
+        const backToMenuResultBtn = document.getElementById('back-to-menu-result');
+        const backHomeBtn = document.getElementById('back-home-button');
+        
+        const scoreDisplay = document.getElementById('score');
+        const comboDisplay = document.getElementById('combo');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const judgmentText = document.getElementById('judgment-text');
+        const scoreChange = document.getElementById('score-change');
+        const currentSongDisplay = document.getElementById('current-song-display');
+        
+        const finalScoreDisplay = document.getElementById('final-score');
+        const maxComboDisplay = document.getElementById('max-combo');
+        const finalAccuracyDisplay = document.getElementById('final-accuracy');
+        const perfectCountDisplay = document.getElementById('perfect-count');
+        const greatCountDisplay = document.getElementById('great-count');
+        const goodCountDisplay = document.getElementById('good-count');
+        const missCountDisplay = document.getElementById('miss-count');
+        const rankBadge = document.getElementById('rank-badge');
+        
+        // 模拟加载资源
+        function loadResources() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve();
+                }, 2000);
+            });
+        }
+
+        // 初始化游戏
+        async function initGame() {
+            await loadResources();
+            loadingScreen.classList.add('hidden');
+            mainMenu.classList.remove('hidden');
+        }
+
+        // 开始游戏
+        function startGame(song) {
+            gameState.isPlaying = true;
+            gameState.isPaused = false;
+            gameState.score = 0;
+            gameState.combo = 0;
+            gameState.maxCombo = 0;
+            gameState.perfectCount = 0;
+            gameState.greatCount = 0;
+            gameState.goodCount = 0;
+            gameState.missCount = 0;
+            
+            // 设置当前歌曲
+            gameState.currentSong = song || gameState.songs[0];
+            currentSongDisplay.textContent = `${gameState.currentSong.title} - ${gameState.currentSong.artist}`;
+            
+            updateGameDisplay();
+            
+            mainMenu.classList.add('hidden');
+            songSelection.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            // 生成音符
+            generateNotes();
+            
+            // 开始游戏循环
+            gameState.startTime = Date.now();
+            gameLoop();
+            
+            // 播放音乐
+            gameState.audio = new Audio(gameState.currentSong.audio);
+            gameState.audio.play().catch(e => console.error("无法自动播放音频:", e));
+            
+            // 音乐结束后显示结算界面
+            gameState.audio.addEventListener('ended', () => {
+                setTimeout(showResultScreen, 1000);
+            });
+        }
+
+        // 生成音符
+        function generateNotes() {
+            const lanes = 4;
+            const totalNotes = 100;
+            const noteDuration = 30000; // 30秒内生成音符
+            
+            for (let i = 0; i < totalNotes; i++) {
+                const lane = Math.floor(Math.random() * lanes);
+                const time = Math.random() * noteDuration;
+                
+                gameState.notes.push({
+                    lane,
+                    time,
+                    hit: false,
+                    missed: false,
+                    element: null
+                });
+            }
+            
+            // 按时间排序
+            gameState.notes.sort((a, b) => a.time - b.time);
+        }
+
+        // 游戏循环
+        function gameLoop() {
+            if (gameState.isPaused) return;
+            
+            const currentTime = Date.now() - gameState.startTime;
+            
+            // 生成音符
+            gameState.notes.forEach(note => {
+                if (!note.element && note.time <= currentTime + gameState.noteSpeed) {
+                    createNoteElement(note);
+                }
+            });
+            
+            // 检查判定
+            checkJudgments(currentTime);
+            
+            // 检查游戏是否结束
+            const allNotesProcessed = gameState.notes.every(note => note.hit || note.missed);
+            if (allNotesProcessed && gameState.audio && gameState.audio.ended) {
+                setTimeout(showResultScreen, 1000);
+                return;
+            }
+            
+            // 继续游戏循环
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 创建音符元素
+        function createNoteElement(note) {
+            const noteElement = document.createElement('div');
+            noteElement.className = 'absolute w-10 h-10 rounded-full transition-all duration-300';
+            
+            // 根据轨道设置颜色
+            switch(note.lane) {
+                case 0:
+                    noteElement.classList.add('bg-primary', 'glow');
+                    break;
+                case 1:
+                    noteElement.classList.add('bg-secondary', 'glow');
+                    break;
+                case 2:
+                    noteElement.classList.add('bg-accent', 'glow');
+                    break;
+                case 3:
+                    noteElement.classList.add('bg-light', 'glow');
+                    break;
+            }
+            
+            // 设置位置
+            const gameArea = document.querySelector('#game-screen .flex-1:nth-child(' + (note.lane + 1) + ')');
+            noteElement.style.left = '50%';
+            noteElement.style.transform = 'translateX(-50%)';
+            noteElement.style.bottom = '100%';
+            
+            // 添加到DOM
+            gameArea.appendChild(noteElement);
+            note.element = noteElement;
+            
+            // 设置动画
+            const fallDuration = gameState.noteSpeed - (Date.now() - gameState.startTime - note.time);
+            noteElement.style.transition = `transform ${fallDuration}ms linear`;
+            
+            // 开始下落
+            setTimeout(() => {
+                if (note.element && !note.hit && !note.missed) {
+                    noteElement.style.transform = 'translateX(-50%) translateY(calc(100vh - 250px))';
+                }
+            }, 10);
+        }
+
+        // 检查判定
+        function checkJudgments(currentTime) {
+            gameState.notes.forEach(note => {
+                if (note.hit || note.missed) return;
+                
+                const noteElement = note.element;
+                if (!noteElement) return;
+                
+                // 计算音符位置
+                const judgmentLineY = window.innerHeight - 250; // 判定线位置
+                const noteRect = noteElement.getBoundingClientRect();
+                const noteY = noteRect.top + noteRect.height / 2;
+                
+                // 计算与判定线的距离
+                const distance = Math.abs(noteY - judgmentLineY);
+                
+                // 如果音符已经过了判定线但未被击中
+                if (noteY > judgmentLineY + 50) {
+                    note.missed = true;
+                    showJudgment("MISS", 0);
+                    updateCombo(0);
+                    
+                    // 淡出音符
+                    noteElement.style.opacity = '0';
+                    setTimeout(() => {
+                        if (noteElement.parentNode) {
+                            noteElement.parentNode.removeChild(noteElement);
+                        }
+                    }, 300);
+                }
+            });
+        }
+
+        // 处理按键
+        function handleKeyPress(lane) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            const currentTime = Date.now() - gameState.startTime;
+            const judgmentLineY = window.innerHeight - 250; // 判定线位置
+            
+            // 查找最接近判定线的音符
+            let closestNote = null;
+            let minDistance = Infinity;
+            
+            gameState.notes.forEach(note => {
+                if (note.hit || note.missed || note.lane !== lane) return;
+                
+                const noteElement = note.element;
+                if (!noteElement) return;
+                
+                const noteRect = noteElement.getBoundingClientRect();
+                const noteY = noteRect.top + noteRect.height / 2;
+                const distance = Math.abs(noteY - judgmentLineY);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestNote = note;
+                }
+            });
+            
+            // 如果找到音符并在判定范围内
+            if (closestNote && minDistance < 100) {
+                let scoreValue = 0;
+                let judgment = "";
+                
+                if (minDistance < 15) {
+                    judgment = "PERFECT";
+                    scoreValue = 1000;
+                    gameState.perfectCount++;
+                } else if (minDistance < 30) {
+                    judgment = "GREAT";
+                    scoreValue = 800;
+                    gameState.greatCount++;
+                } else if (minDistance < 50) {
+                    judgment = "GOOD";
+                    scoreValue = 500;
+                    gameState.goodCount++;
+                } else {
+                    judgment = "MISS";
+                    scoreValue = 0;
+                    gameState.missCount++;
+                }
+                
+                closestNote.hit = true;
+                
+                // 显示判定
+                showJudgment(judgment, scoreValue);
+                
+                // 更新连击
+                updateCombo(scoreValue > 0 ? 1 : 0);
+                
+                // 更新分数
+                updateScore(scoreValue);
+                
+                // 移除音符
+                closestNote.element.style.opacity = '0';
+                setTimeout(() => {
+                    if (closestNote.element.parentNode) {
+                        closestNote.element.parentNode.removeChild(closestNote.element);
+                    }
+                }, 300);
+            } else {
+                // 没有击中任何音符
+                showJudgment("MISS", 0);
+                updateCombo(0);
+            }
+        }
+
+        // 显示判定结果
+        function showJudgment(text, score) {
+            judgmentText.textContent = text;
+            judgmentText.className = 'absolute bottom-56 left-0 right-0 text-center text-3xl font-bold opacity-0';
+            
+            // 根据判定结果设置颜色
+            if (text === "PERFECT") {
+                judgmentText.classList.add('judgment-perfect', 'judgment-appear');
+            } else if (text === "GREAT") {
+                judgmentText.classList.add('judgment-great', 'judgment-appear');
+            } else if (text === "GOOD") {
+                judgmentText.classList.add('judgment-good', 'judgment-appear');
+            } else {
+                judgmentText.classList.add('judgment-miss', 'judgment-appear');
+            }
+            
+            // 显示分数变化
+            if (score > 0) {
+                scoreChange.textContent = `+${score}`;
+                scoreChange.className = 'absolute bottom-48 left-0 right-0 text-center text-xl opacity-0 score-change';
+                
+                if (text === "PERFECT") {
+                    scoreChange.classList.add('judgment-perfect');
+                } else if (text === "GREAT") {
+                    scoreChange.classList.add('judgment-great');
+                } else {
+                    scoreChange.classList.add('judgment-good');
+                }
+            }
+            
+            // 自动隐藏
+            setTimeout(() => {
+                judgmentText.style.opacity = '0';
+                scoreChange.style.opacity = '0';
+            }, 1000);
+        }
+
+        // 更新分数
+        function updateScore(points) {
+            gameState.score += points;
+            scoreDisplay.textContent = gameState.score.toLocaleString();
+            
+            // 计算准确度
+            const totalNotes = gameState.perfectCount + gameState.greatCount + gameState.goodCount + gameState.missCount;
+            if (totalNotes > 0) {
+                const accuracy = ((gameState.perfectCount * 100 + gameState.greatCount * 80 + gameState.goodCount * 50) / (totalNotes * 100)) * 100;
+                gameState.accuracy = Math.round(accuracy * 10) / 10; // 保留一位小数
+                accuracyDisplay.textContent = gameState.accuracy + "%";
+            }
+        }
+
+        // 更新连击
+        function updateCombo(increment) {
+            if (increment > 0) {
+                gameState.combo += increment;
+                if (gameState.combo > gameState.maxCombo) {
+                    gameState.maxCombo = gameState.combo;
+                }
+                comboDisplay.textContent = gameState.combo;
+                comboDisplay.classList.add('combo-counter');
+                
+                // 移除动画类以便重新触发
+                setTimeout(() => {
+                    comboDisplay.classList.remove('combo-counter');
+                }, 300);
+            } else {
+                gameState.combo = 0;
+                comboDisplay.textContent = gameState.combo;
+            }
+        }
+
+        // 更新游戏显示
+        function updateGameDisplay() {
+            scoreDisplay.textContent = gameState.score.toLocaleString();
+            comboDisplay.textContent = gameState.combo;
+            accuracyDisplay.textContent = gameState.accuracy + "%";
+        }
+
+        // 显示结算界面
+        function showResultScreen() {
+            gameState.isPlaying = false;
+            
+            // 填充结算数据
+            finalScoreDisplay.textContent = gameState.score.toLocaleString();
+            maxComboDisplay.textContent = gameState.maxCombo;
+            finalAccuracyDisplay.textContent = gameState.accuracy + "%";
+            perfectCountDisplay.textContent = gameState.perfectCount;
+            greatCountDisplay.textContent = gameState.greatCount;
+            goodCountDisplay.textContent = gameState.goodCount;
+            missCountDisplay.textContent = gameState.missCount;
+            
+            // 计算评级
+            let rank = "F";
+            if (gameState.accuracy >= 95) {
+                rank = "S";
+                rankBadge.className = 'w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-primary/20';
+            } else if (gameState.accuracy >= 90) {
+                rank = "A";
+                rankBadge.className = 'w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-teal-400 flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-green-400/20';
+            } else if (gameState.accuracy >= 80) {
+                rank = "B";
+                rankBadge.className = 'w-20 h-20 rounded-full bg-gradient-to-br from-yellow-500 to-orange-400 flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-yellow-400/20';
+            } else if (gameState.accuracy >= 70) {
+                rank = "C";
+                rankBadge.className = 'w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-purple-400/20';
+            } else {
+                rankBadge.className = 'w-20 h-20 rounded-full bg-gradient-to-br from-gray-600 to-gray-400 flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-gray-400/20';
+            }
+            rankBadge.textContent = rank;
+            
+            // 显示结算界面
+            gameScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            // 停止音频
+            if (gameState.audio) {
+                gameState.audio.pause();
+                gameState.audio = null;
+            }
+        }
+
+        // 暂停游戏
+        function pauseGame() {
+            if (!gameState.isPlaying) return;
+            
+            gameState.isPaused = true;
+            pauseMenu.classList.remove('hidden');
+            
+            // 暂停音频
+            if (gameState.audio) {
+                gameState.audio.pause();
+            }
+        }
+
+        // 恢复游戏
+        function resumeGame() {
+            if (!gameState.isPlaying) return;
+            
+            gameState.isPaused = false;
+            pauseMenu.classList.add('hidden');
+            
+            // 恢复音频
+            if (gameState.audio) {
+                gameState.audio.play().catch(e => console.error("无法恢复播放音频:", e));
+            }
+        }
+
+        // 重新开始游戏
+        function restartGame() {
+            pauseMenu.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            startGame(gameState.currentSong);
+        }
+
+        // 返回主菜单
+        function backToMainMenu() {
+            gameState.isPlaying = false;
+            gameState.isPaused = false;
+            
+            mainMenu.classList.remove('hidden');
+            songSelection.classList.add('hidden');
+            gameScreen.classList.add('hidden');
+            pauseMenu.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            
+            // 停止音频
+            if (gameState.audio) {
+                gameState.audio.pause();
+                gameState.audio = null;
+            }
+        }
+
+        // 事件监听
+        document.addEventListener('DOMContentLoaded', initGame);
+        
+        // 按钮事件
+        startGameBtn.addEventListener('click', () => startGame());
+        selectSongBtn.addEventListener('click', () => {
+            mainMenu.classList.add('hidden');
+            songSelection.classList.remove('hidden');
+        });
+        backToMenuBtn.addEventListener('click', backToMainMenu);
+        pauseBtn.addEventListener('click', pauseGame);
+        resumeGameBtn.addEventListener('click', resumeGame);
+        restartGameBtn.addEventListener('click', restartGame);
+        quitGameBtn.addEventListener('click', backToMainMenu);
+        playAgainBtn.addEventListener('click', restartGame);
+        backToMenuResultBtn.addEventListener('click', backToMainMenu);
+        backHomeBtn.addEventListener('click', backToMainMenu);
+        
+        // 歌曲选择
+        document.querySelectorAll('.song-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const songTitle = card.querySelector('h3').textContent;
+                const selectedSong = gameState.songs.find(song => song.title === songTitle);
+                if (selectedSong) {
+                    startGame(selectedSong);
+                }
+            });
+        });
+        
+        // 键盘事件
+        document.addEventListener('keydown', (e) => {
+            if (e.repeat) return;
+            
+            // 暂停/恢复游戏
+            if (e.code === 'Space') {
+                if (gameState.isPlaying && !gameState.isPaused) {
+                    pauseGame();
+                } else if (gameState.isPlaying && gameState.isPaused) {
+                    resumeGame();
+                }
+                return;
+            }
+            
+            // 处理音符击打
+            if (gameState.isPlaying && !gameState.isPaused) {
+                switch(e.key.toLowerCase()) {
+                    case 'a':
+                    case 'arrowleft':
+                        handleKeyPress(0);
+                        break;
+                    case 's':
+                    case 'arrowup':
+                        handleKeyPress(1);
+                        break;
+                    case 'd':
+                    case 'arrowdown':
+                        handleKeyPress(2);
+                        break;
+                    case 'f':
+                    case 'arrowright':
+                        handleKeyPress(3);
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+    

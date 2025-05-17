@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医智慧养生 - 中老年健康生活指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B4513',     // 暖棕色作为主色调，体现中医传统感
+                        secondary: '#388E3C',   // 绿色作为辅助色，代表自然、健康
+                        neutral: '#F5F5DC',     // 米黄色作为中性色，营造舒适氛围
+                        dark: '#5D4037',        // 深棕色用于文本
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            }
+            .transition-custom {
+                transition: all 0.3s ease-in-out;
+            }
+            .hover-scale {
+                transition: transform 0.3s ease;
+            }
+            .hover-scale:hover {
+                transform: scale(1.03);
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral text-dark antialiased">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 bg-primary/95 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-2">
+                <i class="fa-solid fa-leaf text-2xl text-secondary"></i>
+                <span class="text-xl font-bold">中医智慧养生</span>
+            </a>
+            
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="hover:text-secondary transition-colors">首页</a>
+                <a href="#articles" class="hover:text-secondary transition-colors">养生文章</a>
+                <a href="#recipes" class="hover:text-secondary transition-colors">养生食谱</a>
+                <a href="#exercises" class="hover:text-secondary transition-colors">养生运动</a>
+                <a href="#experts" class="hover:text-secondary transition-colors">专家咨询</a>
+                <a href="#about" class="hover:text-secondary transition-colors">关于我们</a>
+            </nav>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menuBtn" class="md:hidden text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden bg-primary/95 py-4 px-4 shadow-lg animate-fade-in-down">
+            <nav class="flex flex-col space-y-4">
+                <a href="#home" class="hover:text-secondary transition-colors py-2">首页</a>
+                <a href="#articles" class="hover:text-secondary transition-colors py-2">养生文章</a>
+                <a href="#recipes" class="hover:text-secondary transition-colors py-2">养生食谱</a>
+                <a href="#exercises" class="hover:text-secondary transition-colors py-2">养生运动</a>
+                <a href="#experts" class="hover:text-secondary transition-colors py-2">专家咨询</a>
+                <a href="#about" class="hover:text-secondary transition-colors py-2">关于我们</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-b from-primary/20 to-neutral">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-primary mb-4 text-shadow">
+                        传承中医智慧<br>拥抱健康生活
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 max-w-xl">
+                        专为中老年人打造的中医养生平台，提供专业的养生知识、食疗方案和运动指导，让您的晚年生活更加健康、充实。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#articles" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                            浏览文章
+                        </a>
+                        <a href="#subscribe" class="bg-secondary hover:bg-secondary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                            订阅资讯
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="rounded-xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-all duration-500">
+                        <img src="https://picsum.photos/id/106/600/400" alt="中医养生" class="w-full h-auto">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-all duration-500">
+                        <p class="text-sm font-semibold text-primary">
+                            <i class="fa-solid fa-quote-left text-secondary mr-2"></i>
+                            养生之道，常欲小劳，但莫大疲
+                            <i class="fa-solid fa-quote-right text-secondary ml-2"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特色区域 -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary mb-4">中医养生特色</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    我们专注于为中老年人提供全面、专业、实用的中医养生知识，帮助您调理身体，延缓衰老，享受健康生活。
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 特色卡片1 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-book text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">传统养生知识</h3>
+                    <p class="text-gray-600">
+                        深入解析中医经典理论，包括阴阳五行、经络气血等基础概念，帮助您理解中医养生的核心原理。
+                    </p>
+                </div>
+                
+                <!-- 特色卡片2 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-leaf text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">食疗养生方案</h3>
+                    <p class="text-gray-600">
+                        根据不同体质和季节变化，提供个性化的食疗建议和养生食谱，让您通过饮食调理达到健康养生的目的。
+                    </p>
+                </div>
+                
+                <!-- 特色卡片3 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-heartbeat text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">运动养生指导</h3>
+                    <p class="text-gray-600">
+                        详细介绍太极拳、八段锦、五禽戏等适合中老年人的养生运动，帮助您增强体质，提高生活质量。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 养生文章 -->
+    <section id="articles" class="py-16 bg-neutral/50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary mb-4">养生文章</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    探索中医养生的奥秘，了解适合中老年人的养生方法和健康知识
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 文章卡片1 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/225/600/400" alt="四季养生" class="w-full h-52 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <span class="flex items-center"><i class="fa-solid fa-calendar-days mr-2"></i> 2025-05-10</span>
+                            <span class="mx-2">•</span>
+                            <span class="flex items-center"><i class="fa-solid fa-user mr-2"></i> 中医师 李明</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-primary hover:text-secondary transition-colors">
+                            <a href="#">四季养生之道 - 春季养肝</a>
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            春季是万物复苏的季节，中医认为春季与肝脏相应，此时应注重养肝护肝。本文将为您介绍春季养肝的基本原则和具体方法...
+                        </p>
+                        <a href="#" class="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors">
+                            阅读全文 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+                
+                <!-- 文章卡片2 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/292/600/400" alt="中医食疗" class="w-full h-52 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <span class="flex items-center"><i class="fa-solid fa-calendar-days mr-2"></i> 2025-05-05</span>
+                            <span class="mx-2">•</span>
+                            <span class="flex items-center"><i class="fa-solid fa-user mr-2"></i> 营养师 王芳</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-primary hover:text-secondary transition-colors">
+                            <a href="#">中医食疗 - 脾胃虚弱的调理方法</a>
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            脾胃是后天之本，中老年人脾胃功能往往较弱。本文将介绍几种简单易行的食疗方法，帮助您调理脾胃，增强消化吸收功能...
+                        </p>
+                        <a href="#" class="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors">
+                            阅读全文 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+                
+                <!-- 文章卡片3 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/325/600/400" alt="中医按摩" class="w-full h-52 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <span class="flex items-center"><i class="fa-solid fa-calendar-days mr-2"></i> 2025-04-28</span>
+                            <span class="mx-2">•</span>
+                            <span class="flex items-center"><i class="fa-solid fa-user mr-2"></i> 按摩师 张伟</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-primary hover:text-secondary transition-colors">
+                            <a href="#">自我按摩保健 - 缓解腰背疼痛</a>
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            腰背疼痛是中老年人常见的问题，通过简单的自我按摩可以有效缓解疼痛。本文将介绍几个针对腰背疼痛的按摩穴位和方法...
+                        </p>
+                        <a href="#" class="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors">
+                            阅读全文 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    查看更多文章
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 养生食谱 -->
+    <section id="recipes" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary mb-4">养生食谱</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    健康饮食是养生的基础，这里为您提供适合中老年人的营养均衡食谱
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 食谱卡片1 -->
+                <div class="bg-neutral rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/1080/600/400" alt="红枣枸杞粥" class="w-full h-52 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">补气养血</span>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                                <span class="ml-1 text-gray-600">4.5</span>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-primary">红枣枸杞粥</h3>
+                        <p class="text-gray-600 mb-4">
+                            红枣和枸杞都是中医常用的滋补食材，这款粥具有补气养血、健脾养胃的功效，特别适合中老年人食用。
+                        </p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                <span>30分钟</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-bolt mr-1"></i>
+                                <span>简单</span>
+                            </div>
+                        </div>
+                        <a href="#" class="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors">
+                            查看详情 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 食谱卡片2 -->
+                <div class="bg-neutral rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/488/600/400" alt="菊花决明子茶" class="w-full h-52 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">清肝明目</span>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <span class="ml-1 text-gray-600">5.0</span>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-primary">菊花决明子茶</h3>
+                        <p class="text-gray-600 mb-4">
+                            菊花和决明子都有清肝明目的作用，这款茶对于长时间使用电子设备的中老年人尤为适宜，可以缓解眼睛疲劳。
+                        </p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                <span>10分钟</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-bolt mr-1"></i>
+                                <span>极简单</span>
+                            </div>
+                        </div>
+                        <a href="#" class="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors">
+                            查看详情 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 食谱卡片3 -->
+                <div class="bg-neutral rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/312/600/400" alt="山药莲子羹" class="w-full h-52 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">健脾益肾</span>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                                <span class="ml-1 text-gray-600">4.0</span>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-primary">山药莲子羹</h3>
+                        <p class="text-gray-600 mb-4">
+                            山药和莲子都是健脾益肾的佳品，这款羹口感细腻，容易消化，适合脾胃虚弱的中老年人食用。
+                        </p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                <span>40分钟</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-bolt mr-1"></i>
+                                <span>中等</span>
+                            </div>
+                        </div>
+                        <a href="#" class="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors">
+                            查看详情 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    浏览更多食谱
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 养生运动 -->
+    <section id="exercises" class="py-16 bg-gradient-to-b from-neutral/50 to-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary mb-4">养生运动</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    适当的运动是健康的关键，这里为您介绍适合中老年人的中医养生运动
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h3 class="text-2xl font-bold mb-6 text-primary">八段锦 - 强身健体的传统功法</h3>
+                    <p class="text-gray-600 mb-6">
+                        八段锦是中国传统养生功法，由八种不同的动作组成，每段动作都有特定的健身功效。它动作舒缓，刚柔相济，适合各个年龄段的人群练习，尤其适合中老年人。
+                    </p>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start">
+                            <div class="mt-1 bg-primary/20 rounded-full p-1 mr-3">
+                                <i class="fa-solid fa-check text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-primary">调节气血</h4>
+                                <p class="text-gray-600">帮助调节气血运行，增强身体免疫力</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="mt-1 bg-primary/20 rounded-full p-1 mr-3">
+                                <i class="fa-solid fa-check text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-primary">增强体质</h4>
+                                <p class="text-gray-600">改善肌肉力量和关节灵活性</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="mt-1 bg-primary/20 rounded-full p-1 mr-3">
+                                <i class="fa-solid fa-check text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-primary">调节心理</h4>
+                                <p class="text-gray-600">帮助缓解压力，改善睡眠质量</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="inline-block bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        查看详细教程
+                    </a>
+                </div>
+                <div class="order-1 md:order-2 relative">
+                    <div class="rounded-xl overflow-hidden shadow-2xl">
+                        <img src="https://picsum.photos/id/237/600/800" alt="八段锦" class="w-full h-auto">
+                    </div>
+                    <div class="absolute -bottom-5 -right-5 bg-white p-4 rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-all duration-500">
+                        <p class="text-sm font-semibold text-primary">
+                            "每日练八段，百病不上身"
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 运动卡片1 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-person-circle-exclamation text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">太极拳</h3>
+                    <p class="text-gray-600">
+                        太极拳是一种柔和的中国传统武术，动作缓慢、连贯，有助于调节呼吸、增强平衡能力和心肺功能。
+                    </p>
+                </div>
+                
+                <!-- 运动卡片2 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-dove text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">五禽戏</h3>
+                    <p class="text-gray-600">
+                        五禽戏模仿五种动物的动作：虎、鹿、熊、猿、鸟，能锻炼身体的各个部位，增强体质。
+                    </p>
+                </div>
+                
+                <!-- 运动卡片3 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-walking text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">慢步走</h3>
+                    <p class="text-gray-600">
+                        慢步走是最简单的运动方式，适合大多数中老年人，有助于促进血液循环和新陈代谢。
+                    </p>
+                </div>
+                
+                <!-- 运动卡片4 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-hand-sparkles text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">气功</h3>
+                    <p class="text-gray-600">
+                        气功是一种通过调节呼吸和姿势来调整体内能量的传统养生方法，有助于放松身心，增强体质。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 专家咨询 -->
+    <section id="experts" class="py-16 bg-neutral/30">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary mb-4">专家咨询</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    我们邀请了多位资深中医专家为您提供专业的养生建议和健康指导
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 专家卡片1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/64/400/400" alt="中医师 李明" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary">李明 中医师</h3>
+                                <p class="text-gray-600">主任医师 | 从医30年</p>
+                            </div>
+                            <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">内科</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            擅长中医内科疾病的诊治和中医养生调理，对中老年常见疾病如高血压、糖尿病等有丰富的治疗经验。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://picsum.photos/id/1/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/id/2/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/id/3/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-medium border-2 border-white">
+                                    99+
+                                </div>
+                            </div>
+                            <a href="#" class="text-primary hover:text-secondary transition-colors font-medium">
+                                预约咨询 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 专家卡片2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/65/400/400" alt="中医师 王芳" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary">王芳 中医师</h3>
+                                <p class="text-gray-600">副主任医师 | 从医25年</p>
+                            </div>
+                            <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">妇科</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            专注于女性健康和中医养生调理，擅长更年期综合征、月经不调等妇科疾病的中医治疗和养生指导。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://picsum.photos/id/4/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/id/5/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/id/6/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-medium border-2 border-white">
+                                    99+
+                                </div>
+                            </div>
+                            <a href="#" class="text-primary hover:text-secondary transition-colors font-medium">
+                                预约咨询 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 专家卡片3 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover-scale">
+                    <img src="https://picsum.photos/id/91/400/400" alt="中医师 张伟" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary">张伟 中医师</h3>
+                                <p class="text-gray-600">主治医师 | 从医20年</p>
+                            </div>
+                            <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">针灸</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            擅长针灸推拿和中医康复治疗，对颈椎病、腰椎病、关节炎等中老年常见疾病有独特的治疗方法。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://picsum.photos/id/7/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/id/8/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/id/9/40/40" alt="患者" class="w-8 h-8 rounded-full border-2 border-white">
+                                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-medium border-2 border-white">
+                                    99+
+                                </div>
+                            </div>
+                            <a href="#" class="text-primary hover:text-secondary transition-colors font-medium">
+                                预约咨询 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    查看全部专家
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 订阅区域 -->
+    <section id="subscribe" class="py-20 bg-primary">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-white mb-6">订阅我们的养生资讯</h2>
+                <p class="text-white/80 text-lg mb-8">
+                    定期获取最新的中医养生知识、季节养生建议和专家讲座信息，让健康生活陪伴您每一天
+                </p>
+                <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+                    <input type="email" placeholder="请输入您的邮箱地址" class="flex-grow px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-secondary">
+                    <button type="submit" class="bg-secondary hover:bg-secondary/90 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 whitespace-nowrap">
+                        立即订阅
+                    </button>
+                </form>
+                <p class="text-white/60 text-sm mt-4">
+                    我们尊重您的隐私，不会向第三方泄露您的信息
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="rounded-xl overflow-hidden shadow-2xl">
+                        <img src="https://picsum.photos/id/180/600/400" alt="关于我们" class="w-full h-auto">
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary mb-6">关于我们</h2>
+                    <p class="text-gray-600 mb-6">
+                        中医智慧养生平台致力于为中老年人提供专业、全面、实用的中医养生知识和健康服务。我们汇集了多位资深中医专家，结合传统中医理论和现代科学，为您量身定制适合的养生方案。
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        我们的使命是通过传播中医养生智慧，帮助中老年人改善健康状况，提高生活质量，享受健康、快乐的晚年生活。
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="bg-neutral rounded-lg p-4">
+                            <div class="text-3xl font-bold text-primary mb-2">100+</div>
+                            <div class="text-gray-600">专业养生文章</div>
+                        </div>
+                        <div class="bg-neutral rounded-lg p-4">
+                            <div class="text-3xl font-bold text-primary mb-2">50+</div>
+                            <div class="text-gray-600">养生食谱</div>
+                        </div>
+                        <div class="bg-neutral rounded-lg p-4">
+                            <div class="text-3xl font-bold text-primary mb-2">20+</div>
+                            <div class="text-gray-600">中医专家</div>
+                        </div>
+                        <div class="bg-neutral rounded-lg p-4">
+                            <div class="text-3xl font-bold text-primary mb-2">10k+</div>
+                            <div class="text-gray-600">忠实用户</div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                            联系我们
+                        </a>
+                        <a href="#" class="bg-white border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                            加入我们
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fa-solid fa-leaf text-2xl text-secondary"></i>
+                        <span class="text-xl font-bold">中医智慧养生</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        传承中医智慧，拥抱健康生活。为中老年人提供专业的中医养生知识和健康服务。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">快速链接</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#articles" class="text-gray-400 hover:text-white transition-colors">养生文章</a></li>
+                        <li><a href="#recipes" class="text-gray-400 hover:text-white transition-colors">养生食谱</a></li>
+                        <li><a href="#exercises" class="text-gray-400 hover:text-white transition-colors">养生运动</a></li>
+                        <li><a href="#experts" class="text-gray-400 hover:text-white transition-colors">专家咨询</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">联系我们</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-map-marker-alt mt-1 mr-3 text-secondary"></i>
+                            <span class="text-gray-400">北京市海淀区中关村南大街5号</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-phone mr-3 text-secondary"></i>
+                            <span class="text-gray-400">400-888-9999</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-envelope mr-3 text-secondary"></i>
+                            <span class="text-gray-400">info@zyys.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">营业时间</h3>
+                    <ul class="space-y-3">
+                        <li class="flex justify-between">
+                            <span class="text-gray-400">周一至周五</span>
+                            <span class="text-gray-400">9:00 - 18:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-400">周六</span>
+                            <span class="text-gray-400">9:00 - 16:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-400">周日</span>
+                            <span class="text-gray-400">休息</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+                <p>© 2025 中医智慧养生平台 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-primary hover:bg-primary/90 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 opacity-0 translate-y-10">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                navbar.classList.add('bg-primary', 'shadow-lg');
+                navbar.classList.remove('bg-primary/95');
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+            } else {
+                navbar.classList.remove('bg-primary', 'shadow-lg');
+                navbar.classList.add('bg-primary/95');
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        
+        // 移动端菜单
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            } else {
+                menuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动端菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 图片懒加载
+        document.addEventListener("DOMContentLoaded", function() {
+            const lazyImages = [].slice.call(document.querySelectorAll("img"));
+            
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.classList.add("fade-in");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+    
