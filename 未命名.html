@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>双人默契挑战</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .container {
+            background: white;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        #question {
+            font-size: 1.5em;
+            margin: 30px 0;
+            min-height: 60px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .answers {
+            margin-top: 20px;
+        }
+        .answers input {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 双人默契挑战</h1>
+        <p>规则：两人同时回答抽取的问题，答案一致即默契得分！</p>
+
+        <div id="question">点击按钮开始抽取问题</div>
+
+        <button onclick="getRandomQuestion()">抽取问题</button>
+
+    </div>
+
+    <script>
+        // 50个默契挑战问题
+        const questions = [
+            "说出你们都喜欢的一种零食",
+            "说出你们都讨厌的一种食物",
+            "说出你们都喜欢的颜色",
+            "说出你们都喜欢的季节",
+            "说出你们都想养的宠物",
+            "说出你们都想去的旅行地",
+            "说出你们都爱喝的饮料",
+            "说出你们都喜欢的电影类型",
+            "说出你们都愿意一起做的运动",
+            "说出你们都爱吃的水果",
+            "说出你们都觉得最舒服的睡姿",
+            "说出你们都喜欢的天气",
+            "说出你们都经常用的手机APP",
+            "说出你们都爱听的音乐风格",
+            "说出你们都认可的完美早餐搭配",
+            "说出你们早上起床后都会做的第一件事",
+            "说出你们熬夜时最常一起做的事",
+            "说出你们出门都会必带的三样东西",
+            "说出你们吃饭都习惯用左手还是右手",
+            "说出你们整理房间的频率大概是多久一次",
+            "说出你们看书时都喜欢开灯还是关灯",
+            "说出你们喝水都偏爱用玻璃杯还是塑料杯",
+            "说出你们走路的速度都偏快还是偏慢",
+            "说出你们洗澡的时长大概都在多少分钟",
+            "说出你们买东西时都喜欢货比三家还是直接下单",
+            "说出你们生气时都会选择沉默还是吐槽",
+            "说出你们手机屏幕亮度都调亮还是调暗",
+            "说出你们洗衣服都喜欢手洗还是机洗",
+            "说出你们吃泡面都喜欢喝汤还是只吃面",
+            "说出你们空闲时都更喜欢宅家还是出门",
+            "说出你们第一次见面的具体地点",
+            "说出你送给对方的第一件礼物",
+            "说出你们一起去过的第一个景点",
+            "说出你们最常互相说的一句话",
+            "说出你们一起吃的最难忘的一顿饭",
+            "说出你们上次一起大笑到停不下来是因为什么事",
+            "说出你们上次闹小别扭是因为什么",
+            "说出你最佩服对方的一个优点",
+            "说出你们一起熬夜完成的第一件事",
+            "说出你们第一次一起看的电影名字",
+            "说出你们都最想实现的一个小愿望",
+            "说出你们都觉得自己最厉害的共同技能",
+            "说出你们都最想改掉的一个坏习惯",
+            "说出你们都希望未来的家有几个房间",
+            "说出你们都向往的退休生活",
+            "说出你们都觉得最浪漫的事",
+            "说出你们如果中了彩票，第一件想一起做的事",
+            "说出你们都最想一起学习的新技能",
+            "说出你们都最想一起养的宠物名字",
+            "说出你们都计划一起打卡的第一个美食店"
+        ];
+
+        function getRandomQuestion() {
+            const q = questions[Math.floor(Math.random() * questions.length)];
+            document.getElementById("question").textContent = q;
+            document.getElementById("result").textContent = "";
+            document.getElementById("ansA").value = "";
+            document.getElementById("ansB").value = "";
+        }
+
+    </script>
+</body>
+</html>
